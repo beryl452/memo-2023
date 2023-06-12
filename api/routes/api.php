@@ -118,5 +118,7 @@ Route::middleware('auth:sanctum')->group(static function () {
             // 'ability:ressource-myAbilities'
             // ]);
         });
-});
+        Route::get('/logout', [UserController::class, 'logout']);
+    });
 Route::post('/login', [UserController::class, 'login']);
+

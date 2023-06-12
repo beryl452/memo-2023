@@ -138,7 +138,7 @@ const TableBadges = ({ }) => {
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
             onClick={() => {
-              navigate('/Createbadges', { replace: true })
+              navigate('/badge/create', { replace: true })
             }
             }
             className="flex justify-center  items-center rounded bg-primary py-2 px-6 font-medium text-gray hover:shadow-1"

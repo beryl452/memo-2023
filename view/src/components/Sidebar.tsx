@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../images/logo/logo.svg';
 // import SidebarLinkGroup from './SidebarLinkGroup';
+import useUserActions from "../hooks/useUserActions";
+import axios from 'axios';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -10,8 +12,20 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+    const { logout } = useUserActions();
   const { pathname } = location;
-
+  const http = axios.create({
+    baseURL: 'http://localhost:8000/',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${JSON.parse(
+        localStorage.getItem('auth') || '{}'
+      ).token}`,
+    },
+    withCredentials: true,
+  });
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
@@ -64,9 +78,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/">
-          <img 
-          className='w-33 lg:w-33'
-          src={Logo} alt="Logo" />
+          <img
+            className='w-33 lg:w-33'
+            src={Logo} alt="Logo" />
         </NavLink>
 
         <button
@@ -252,6 +266,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <button
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 
                  }`}
+                  onClick={async () => {
+                    await http.get('api/logout')
+                    .then((response)=>{
+                      logout();
+                      console.log(response)
+                      navigate('/auth/signin')
+                    })
+                  }}
                 >
                   <svg
                     className="fill-current"

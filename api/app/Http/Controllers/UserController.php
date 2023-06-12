@@ -213,4 +213,12 @@ class UserController extends Controller
             'abilities' => $abilities,
         ]), 201);
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Logged out'
+        ], 200);
+    }
 }
